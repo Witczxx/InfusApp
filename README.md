@@ -11,3 +11,4 @@ The application calculates the infusion duration and completion time automatical
 - Rhythm-based speed detection (tap button 3× with drip rhythm)
 - Automatic infusion speed & completion time calculation
 - Automated documentation (start & end times)
+
