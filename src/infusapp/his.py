@@ -2,7 +2,7 @@ import random
 import re
 from dataclasses import dataclass
 
-from model import Nurse, Patient
+from model import Nurse, Patient, Medi
 
 
 @dataclass
@@ -14,9 +14,11 @@ class NurseInfo:
 class His:
     def __init__(self):
         self.nurses = []
-        self.nurses.append(Nurse("1000000", "Max Mustermann", "max10"))
+        self.nurses.append(Nurse(nurse_id="1000000", nurse_name="Max Mustermann", pw="max10"))
         self.patients = []
-        self.patients.append(Patient("1000000000", "Anna Schmidt"))
+        self.patients.append(Patient(patient_id="1000000000", patient_name="Anna Schmidt"))
+        self.medis = []
+        self.medis.append(Medi(medi_id="12345-1234", medi_name="Patrickol"))
 
     ### REGISTRATION
     def register_nurse(self, nurse_name, pw):
@@ -195,19 +197,4 @@ class His:
             else:
                 return patient_id
 
-    ### FUNCTIONS FOR MEDICATION
 
-    # Login
-    def medi_login(self): ...
-
-    # Name Valid?
-    def val_medi_name(self): ...
-
-    # ID Valid?
-    def val_medi_id(self): ...
-
-    # Name Exists?
-    def medi_name_exists(self): ...
-
-    # ID Exists?
-    def medi_id_exists(self): ...
