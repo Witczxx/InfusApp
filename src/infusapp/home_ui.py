@@ -1,8 +1,8 @@
 import sys
 
-from record_infusion import Record_Infusion
+from infusapp.record_infusion_ui import RecordInfusion
 
-class Home_Ui:
+class HomeUi:
 
     def __init__(self, actual_nurse):
         self.actual_nurse = actual_nurse
@@ -15,7 +15,7 @@ class Home_Ui:
         choice = input("Your Input: ")
         # Record an Infusion (1)
         if choice == "1": 
-            record_infusion = Record_Infusion(self.actual_nurse)
+            record_infusion = RecordInfusion(self.actual_nurse)
             return record_infusion.record_infusion_ui()
         # Check Infusion Records (2)
         elif choice == "2":

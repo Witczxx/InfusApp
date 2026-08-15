@@ -1,12 +1,12 @@
-from auth_ui import Auth_Ui
+from infusapp.auth_nurse_ui import AuthNurseUi
 
 
 class Main:
     def __init__(self):
-        self.auth_ui = Auth_Ui()
+        self.auth_nurse_ui = AuthNurseUi()
 
     def run(self):
-        return self.auth_ui.start_screen()
+        return self.auth_nurse_ui.start_screen()
 
 
 if __name__ == "__main__":

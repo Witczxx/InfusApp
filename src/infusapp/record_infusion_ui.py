@@ -1,12 +1,12 @@
-from his import His
+from infusapp.patient_service import PatientService
 
 
-class Record_Infusion:
+class RecordInfusion:
 
     def __init__(self, actual_nurse):
         self.actual_nurse = actual_nurse
         self.actual_patient = None
-        self.his = His()
+        self.patient_service = PatientService()
 
     ### WELCOME WRITING
     def record_infusion_ui(self):
@@ -23,11 +23,11 @@ class Record_Infusion:
         user_input = input("Input: ").title()
 
         # ID was entered
-        if self.his.val_patient_name(patient_name=user_input):
+        if self.patient_service.val_patient_name(patient_name=user_input):
             patient_name = user_input
             try:
-                patient_id = self.his.get_patient_id_by_name(patient_name=user_input)
-                actual_patient = self.his.login_patient(
+                patient_id = self.patient_service.get_patient_id_by_name(patient_name=user_input)
+                actual_patient = self.patient_service.login_patient(
                     patient_id=patient_id, patient_name=patient_name
                 )
                 # Login Successful!
@@ -37,11 +37,11 @@ class Record_Infusion:
                 print(errormessage)
                 return self.ask_to_register_patient(patient_name=patient_name)
         # Name was entererd
-        elif self.his.val_patient_id(patient_id=user_input):
+        elif self.patient_service.val_patient_id(patient_id=user_input):
             patient_id = user_input
             try:
-                patient_name = self.his.get_patient_name_by_id(patient_id=user_input)
-                actual_patient = self.his.login_patient(
+                patient_name = self.patient_service.get_patient_name_by_id(patient_id=user_input)
+                actual_patient = self.patient_service.login_patient(
                     patient_id=patient_id, patient_name=patient_name
                 )
                 # Login Successful!
@@ -61,7 +61,7 @@ class Record_Infusion:
         ask_first_infusion = input("Input: ").lower()
         # First Infusion -> Registererd
         if ask_first_infusion == "y":
-            new_patient = self.his.register_patient(patient_name=patient_name)
+            new_patient = self.patient_service.register_patient(patient_name=patient_name)
             self.actual_patient = new_patient
             print("\n---Registration Successful!---")
             print(
