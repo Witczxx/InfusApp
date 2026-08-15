@@ -1,15 +1,12 @@
-from infusapp.patient_service import PatientService
+class RecordUi:
 
-
-class RecordInfusion:
-
-    def __init__(self, actual_nurse):
+    def __init__(self, actual_nurse, patient_service, medi_service):
         self.actual_nurse = actual_nurse
+        self.patient_service = patient_service
+        self.medi_service = medi_service
         self.actual_patient = None
-        self.patient_service = PatientService()
 
-    ### WELCOME WRITING
-    def record_infusion_ui(self):
+    def start(self):
         print("\n\n\n---Record a new Infusion---")
         return self.get_patient()
 
@@ -20,13 +17,15 @@ class RecordInfusion:
         patient_name = None
         # Enter Name or ID
         print("Enter the Patient's Name (First, Last) or ID")
-        user_input = input("Input: ").title()
+        user_input = input("Input: ")
 
-        # ID was entered
-        if self.patient_service.val_patient_name(patient_name=user_input):
-            patient_name = user_input
+        # Name was entered
+        if self.patient_service.val_patient_name(patient_name=user_input.title()):
+            patient_name = user_input.title()
             try:
-                patient_id = self.patient_service.get_patient_id_by_name(patient_name=user_input)
+                patient_id = self.patient_service.get_patient_id_by_name(
+                    patient_name=user_input
+                )
                 actual_patient = self.patient_service.login_patient(
                     patient_id=patient_id, patient_name=patient_name
                 )
@@ -36,11 +35,13 @@ class RecordInfusion:
             except ValueError as errormessage:
                 print(errormessage)
                 return self.ask_to_register_patient(patient_name=patient_name)
-        # Name was entererd
+        # ID was entererd
         elif self.patient_service.val_patient_id(patient_id=user_input):
             patient_id = user_input
             try:
-                patient_name = self.patient_service.get_patient_name_by_id(patient_id=user_input)
+                patient_name = self.patient_service.get_patient_name_by_id(
+                    patient_id=user_input
+                )
                 actual_patient = self.patient_service.login_patient(
                     patient_id=patient_id, patient_name=patient_name
                 )
@@ -61,7 +62,9 @@ class RecordInfusion:
         ask_first_infusion = input("Input: ").lower()
         # First Infusion -> Registererd
         if ask_first_infusion == "y":
-            new_patient = self.patient_service.register_patient(patient_name=patient_name)
+            new_patient = self.patient_service.register_patient(
+                patient_name=patient_name
+            )
             self.actual_patient = new_patient
             print("\n---Registration Successful!---")
             print(
@@ -75,7 +78,7 @@ class RecordInfusion:
         # If not entered y/n
         else:
             print("Answer is not 'y' or 'n'. Try again.")
-            return self.ask_to_register_patient(patient_name)
+            return self.ask_to_register_patient(patient_name=patient_name)
 
     # When Patient (user_input) was found:
     def confirm_patient_login(self, actual_patient):

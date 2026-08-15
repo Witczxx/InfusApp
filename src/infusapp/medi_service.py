@@ -1,10 +1,10 @@
 import json
 import re
 
-class Medication_Db:
+class MediService:
     ### FUNCTIONS FOR MEDICATION
     def __init__(self, filepath):
-        with open("drug-ndc-0001-of-0001.json", "r") as file:
+        with open(filepath, "r") as file:
             self.data = json.load(file)
 
     # Get Access to Database

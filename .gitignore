@@ -4,4 +4,4 @@ pyproject.toml
 .notes/
 __pycache__/
 pyrightconfig.json
-src/infusapp/drug-ndc-0001-of-0001.json
+src/infusapp/medi_database.json

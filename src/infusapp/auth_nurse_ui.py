@@ -1,10 +1,7 @@
-from infusapp.nurse_service import NurseService
-from infusapp.home_ui import HomeUi
-
 class AuthNurseUi:
-    def __init__(self):
+    def __init__(self, nurse_service):
+        self.nurse_service = nurse_service
         self.actual_nurse = None
-        self.nurse_service = NurseService()
 
     ### START SCREEN
     def start_screen(self):
@@ -28,7 +25,7 @@ class AuthNurseUi:
         nurse_id = None
         nurse_name = None
         # Enter Name or ID, and Password
-        user_input = input("Enter Name or ID: ").title()
+        user_input = input("Enter Name or ID: ")
         pw = input("Password: ")
         # Nurse ID was entered
         if self.nurse_service.val_nurse_id(user_input):
@@ -39,8 +36,8 @@ class AuthNurseUi:
                 print(errormessage)
                 return self.start_screen()
         # Nurse Name was entered
-        elif self.nurse_service.val_nurse_name(user_input):
-            nurse_name = user_input
+        elif self.nurse_service.val_nurse_name(user_input.title()):
+            nurse_name = user_input.title()
             try:
                 actual_nurse = self.nurse_service.login_nurse(nurse_name=nurse_name, pw=pw)
             except ValueError as errormessage:
@@ -52,8 +49,7 @@ class AuthNurseUi:
             return self.start_screen()
         # Login was Successful!
         self.actual_nurse = actual_nurse  # Logged in Nurse Name
-        home_ui = HomeUi(self.actual_nurse)
-        return home_ui.home_screen(nurse_name=actual_nurse)
+        return self.actual_nurse
 
     ### REGISTRATION SCREEN (2)
     def register_screen(self):
