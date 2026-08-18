@@ -2,7 +2,7 @@ import random
 import re
 
 from infusapp.model import Patient
-from infusapp.service_helper import check_existence, find_by_value, val_name
+from infusapp.service_helper import check_existence, find_by_value, val_name, generate_id
 
 
 class PatientService:
@@ -17,15 +17,19 @@ class PatientService:
         # ID exists?
         if patient_id is not None:
             if not self.patient_id_exists(patient_id=patient_id):
-                raise ValueError("\n---Patient ID does not exist---")
+                raise ValueError("\n---Patient not found---")
             patient_name = self.get_patient_name_by_id(patient_id=patient_id)
         # Name exists?
         elif patient_name is not None:
             if not self.patient_name_exists(patient_name=patient_name):
                 raise ValueError("\n---Patient not found---")
             patient_id = self.get_patient_id_by_name(patient_name=patient_name)
+        # ID & Name is None
+        else:
+            raise ValueError("\n---Patient not Found---")
         # Login Successful
-        return Patient(patient_id=patient_id, patient_name=patient_name)
+        logged_patient = Patient(patient_id=patient_id, patient_name=patient_name)
+        return patient_id, patient_name
 
     # REGISTRATION
     def register_patient(self, patient_name):
@@ -42,7 +46,7 @@ class PatientService:
         # Add to Database
         new_patient = Patient(patient_id=patient_id, patient_name=patient_name)
         self.patients.append(new_patient)
-        return new_patient
+        return patient_id, patient_name
 
     ### FUNCTIONS
 
@@ -82,10 +86,4 @@ class PatientService:
 
     ### GENERATE ID
     def generate_patient_id(self):
-        while True:
-            patient_id = str(random.randrange(1000000000, 9999999999))
-            for patient in self.patients:
-                if patient_id == patient.patient_id:
-                    break
-            else:
-                return patient_id
+        return generate_id(self.patients, "patient_id", 1000000000, 9999999999)

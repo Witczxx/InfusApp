@@ -1,11 +1,11 @@
 class AuthNurseUi:
     def __init__(self, nurse_service):
         self.nurse_service = nurse_service
-        self.actual_nurse = None
+        self.actual_nurse = []
 
     ### START SCREEN
     def start_screen(self):
-        print("\n\n\n---Welcome to the InfusionApp---")
+        print("\n---Welcome to the InfusionApp---")
         print("Enter '1' or '2'\n1: Login as a Nurse\n2: Register as a Nurse")
         choice = input("Your Input: ")
         # Enter 1 (Login) or 2 (Registration)
@@ -48,8 +48,8 @@ class AuthNurseUi:
             print("Name, ID or Password wrong.")
             return self.start_screen()
         # Login was Successful!
-        self.actual_nurse = actual_nurse  # Logged in Nurse Name
-        return self.actual_nurse
+        self.actual_nurse.append(actual_nurse)  # Logged in Nurse Name
+        return actual_nurse
 
     ### REGISTRATION SCREEN (2)
     def register_screen(self):
@@ -67,7 +67,7 @@ class AuthNurseUi:
                 return self.register_screen()
             else:
                 print("\n---Registration Successful!---")
-                print(f"---Your ID is: {new_nurse.nurse_id}---")
+                print(f"Your ID is: {new_nurse[0]}")
                 print("Please note down your ID")
                 return self.login_screen()
         else:

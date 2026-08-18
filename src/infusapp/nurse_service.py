@@ -3,7 +3,7 @@ import re
 from dataclasses import dataclass
 
 from infusapp.model import Nurse
-from infusapp.service_helper import check_existence, find_by_value, val_name
+from infusapp.service_helper import check_existence, find_by_value, val_name, generate_id
 
 
 @dataclass
@@ -35,7 +35,7 @@ class NurseService:
         if not self.verify_pw(nurse_id=nurse_id, pw=pw):
             raise ValueError("\n---Name, ID or Password wrong.---")
         # Login Successful
-        return nurse_name
+        return nurse_id, nurse_name
 
     ### REGISTRATION
     def register_nurse(self, nurse_name, pw):
@@ -57,7 +57,9 @@ class NurseService:
         # Add to Database
         new_nurse = Nurse(nurse_id=nurse_id, nurse_name=nurse_name, pw=pw)
         self.nurses.append(new_nurse)
+        return nurse_id, nurse_name
         return NurseInfo(nurse_id=new_nurse.nurse_id, nurse_name=new_nurse.nurse_name)
+        # Need some Correction
 
     ### FUNCTIONS
 
@@ -92,7 +94,7 @@ class NurseService:
             entries=self.nurses, field_name="nurse_name", search_value=nurse_name
         )
 
-    # FIND ID
+    # FIND ID [No Shortening, Helper would return Password]
     def get_nurse_id_by_name(self, nurse_name):
         for nurse in self.nurses:
             if nurse_name == nurse.nurse_name:
@@ -100,7 +102,7 @@ class NurseService:
         else:
             return None
 
-    # FIND NAME
+    # FIND NAME [No Shortening, Helper would return Password]
     def get_nurse_name_by_id(self, nurse_id):
         for nurse in self.nurses:
             if nurse_id == nurse.nurse_id:
@@ -110,10 +112,4 @@ class NurseService:
 
     # GENERATE ID
     def generate_nurse_id(self):
-        while True:
-            nurse_id = str(random.randrange(1000000, 9999999))
-            for nurse in self.nurses:
-                if nurse_id == nurse.nurse_id:
-                    break
-            else:
-                return nurse_id
+        return generate_id(self.nurses, "nurse_id", 1000000, 9999999)

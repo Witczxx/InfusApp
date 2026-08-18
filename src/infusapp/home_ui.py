@@ -9,7 +9,6 @@ class HomeUi:
 
     ### InfusApp - Main Menu
     def show_menu(self):
-        print(f"\n\n\n---Welcome, {self.actual_nurse}---")
         print("\n---Home Screen---\nEnter '1', '2', '3' or '4'")
         print(
             "1: Record an Infusion\n2: Check your Infusion Records\n3: How the App works\n4: Logout and Exit"
@@ -20,7 +19,7 @@ class HomeUi:
             return "Record Infusion"
         # Check Infusion Records (2)
         elif choice == "2":
-            return None  # Coding in Progress
+            return "Check Records"  # Coding in Progress
         # How the App Works (3)
         elif choice == "3":
             path = Path(__file__).parent / "app_explanation.md"
@@ -30,7 +29,7 @@ class HomeUi:
                 return self.show_menu()
         # Logout and Exit (4)
         elif choice == "4":
-            sys.exit("\n\n---Goodbye! Looking forward to see you soon!---")
+            return "Logout and Exit"
         # If not entered 1/2/3/4
         else:
             print("Input is not '1', '2', '3' or '4'")

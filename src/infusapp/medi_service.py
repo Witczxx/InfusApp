@@ -1,67 +1,102 @@
-import json
 import re
+import sqlite3
+
+from tabulate import tabulate
+
+from infusapp.medi_db import MediDb
+
 
 class MediService:
-    ### FUNCTIONS FOR MEDICATION
-    def __init__(self, filepath):
-        with open(filepath, "r") as file:
-            self.data = json.load(file)
 
-    # Get Access to Database
+    def __init__(self, medi_db):
+        self.medi_db = medi_db
+        self.data = []
+        self.filtered_data = []
 
-    # Login
-    def medi_login(self): ...
+    def fetch_data(self):
+        # Get Data from Databank
+        self.medi_db.cur.execute("""
+                                 SELECT ingredient, df, strength, route, trade_name
+                                 FROM medications
+                                 """)
+        # Fetch Findings into a Variable
+        self.data = self.medi_db.cur.fetchall()
+        return self.data
 
-    # Name Valid?
-    def val_medi_name(self): ...
+    def find_ingredients(self, user_input):
+        # Filter Unique Findings (all headers) ; filtered by IV/INJECTION
+        data_set = set()
+        for finding in self.data:
+            if "INTRAVENOUS" in finding[3] or "INJECTION" in finding[3]:
+                if any(user_input in str(string) for string in finding):
+                    data_set.add(finding)
+        self.filtered_data = data_set
+        # filter unique data[0]
+        found_ingredients = list({data[0] for data in data_set})
+        # sort alphabetically
+        return sorted(found_ingredients)
 
-    # ID Valid?
-    def val_medi_id(self): ...
+    def choose_ingredient(self, ingredients):
+        # Let User Choose Ingredient
+        if len(ingredients) > 1:
+            print(f"\n---{len(ingredients)} Ingredients found---")
+            print("Choose the correct Ingredient")
+            x = 1
+            for ingredient in ingredients:
+                print(f"-> {x}: {ingredient}")
+                x += 1
+            ingredient_input = int(input("Input: "))
+            chosen_ingredient = ingredients[ingredient_input - 1]
+            print(f"\n---Your Choice---\nIngredient: {chosen_ingredient}")
+        else:
+            chosen_ingredient = ingredients[0]
+            print(f"\n---1 Ingredient Found---")
+            print("---Automatically Chosen---")
+            print("---Your Choice---")
+            print(f"Ingredient: {chosen_ingredient}")
+        return chosen_ingredient
 
-    # Name Exists?
-    def medi_name_exists(self): ...
+    def find_strengths(self, ingredient):
+        # filter unique strengths by chosen data[0]
+        found_strengths = list({data[2] for data in self.filtered_data if data[0] == ingredient})
+        # sort by numbers (first appearing, second appearing, ..)
+        sorted_strengths = sorted(found_strengths, key=self.strengths_sort_key)
+        return sorted_strengths
 
-    # ID Exists?
-    def medi_id_exists(self): ...
+    def choose_strength(self, strengths, ingredient):
+        # Let User Choose Strength
+        if len(strengths) > 1:
+            print(f"\n---{len(strengths)} Strengths found---")
+            print("Choose the correct Strength")
+            x = 1
+            for strength in strengths:
+                print(f"-> {x}: {strength}")
+                x += 1
+            strength_input = int(input("Input: "))  # NEED IMPROVEMENT
+            strength = strengths[strength_input - 1]
+            print(f"\n---Your Choice---")
+            print(f"Ingredient: {ingredient}")
+            print(f"Strength: {strength}")
+            return strength
+        else:
+            strength = strengths[0]
+            print(f"\n---1 Strength found---")
+            print("---Automatically Chosen---")
+            print(f"Ingredient: {ingredient}")
+            print(f"Strength: {strength}")
+            return strength
 
+    def find_df(self, ingredient, strength):
+        final_findings = [
+            finding
+            for finding in self.data
+            if finding[0] == ingredient and finding[2] == strength
+        ]
+        if not final_findings:
+            return "Unknown"
+        df_values = sorted({finding[1] for finding in final_findings})
+        return " | ".join(df_values)
 
-    def everything(self):
-        for medi in self.data.get("results", []):
-            # Route and Dosage Form
-            routes = medi.get("route", [])
-            routes = ", ".join(routes) if routes else "Unknown"
-            dosage_form = medi.get("dosage_form", "")
-            # Medi Group Data (Brand Name, Generic Name, NDC)
-            brand_name = medi.get("brand_name", "Unknown")
-            generic_name = medi.get("generic_name", "Unknown")
-            product_ndc = medi.get("product_ndc")
-            # Medi Group RXCUI
-            openfda = medi.get("openfda", {})
-            rxcui = openfda.get("rxcui", [None])[0]
-            # Active Ingredients Data (Strengths, Medi Names)
-            ingredients = [
-                f"{ing.get('name')}: {ing.get('strength', 'No Information')}"
-                for ing in medi.get("active_ingredients", [])
-            ]
-            # Packages Data (NDC, Description)
-            packages = []
-            for pkg in medi.get("packaging", []):
-                pkg_des_raw = pkg.get("description", "Unknown")
-                segments = pkg_des_raw.split("/")
-                for segment in segments:
-                    segment = segment.strip()
-                    if match := re.search(r"^(?P<des>[^(]+)\s*(\((?P<ndc>[0-9-]+)\))?$", segment):
-                        packages.append({
-                            "ndc": match.group("ndc"),
-                            "description": match.group("des").strip(),
-                        })
-            # Output
-            print(f"Brand: {brand_name} | Generic: {generic_name}")
-            print(f"Dosage Form: {dosage_form} | Route: {routes}")
-            print(f"NDC: {product_ndc} | RxCUI: {rxcui}")
-            print(f"Strengths: {', '.join(ingredients)}")
-            print("-" * 25)
-            print("Packages:")
-            for package in packages:
-                print(f"----------\nNDC: {package['ndc']}\nDescription: {package['description']}")
-            print("-" * 50)
+    def strengths_sort_key(self, strengths):
+        matches = re.findall(r"\d+", strengths)
+        return tuple(int(n) for n in matches)
