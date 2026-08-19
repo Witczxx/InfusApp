@@ -1,6 +1,34 @@
-from pathlib import Path
 import sys
+from pathlib import Path
 
+from infusapp.db.connection import Database
+from infusapp.db.nurse_repository import NurseRepository
+from infusapp.models.models import Nurse, NurseInfo
+from infusapp.services.nurse_service import NurseService
+from infusapp.ui.auth_nurse_ui import AuthNurseUi
+
+db_path = Path(__file__).parent.parent / "data" / "infusapp.db"
+
+class Main:
+    def __init__(self):
+        self.db = Database(db_path=db_path)
+        self.nurse_rep = NurseRepository(db=self.db)
+        self.nurse_service = NurseService(nurse_rep=self.nurse_rep)
+        self.auth_nurse_ui = AuthNurseUi(nurse_service=self.nurse_service)
+
+    # APP STARTPOINT - Nurse - Login / Registration
+    def run_login(self) -> None:
+        nurse_info: NurseInfo = self.auth_nurse_ui.run()
+        return self.run_home(nurse_info = nurse_info)
+
+    ### HOME UI - NEW RECORD / HISTORY / TUTORIAL / EXIT
+    def run_home(self, nurse_info: NurseInfo) -> None:
+        ...
+
+
+# -------------------------------------------------
+
+'''
 from infusapp import drip_rate_tapper
 from infusapp.auth_nurse_ui import AuthNurseUi
 from infusapp.home_ui import HomeUi
@@ -13,10 +41,11 @@ from infusapp.drip_rate_tapper import DripRateTapper
 from infusapp.check_records import CheckRecords
 
 db_path = Path(__file__).parent / "medi_database.txt"
+'''
 
+# --------------------------------------------------------
 
-class Main:
-    def __init__(self):
+'''
         # Start Database
         self.medi_db = MediDb(filepath=db_path, database="medi.db")
         self.medi_db.create_database()
@@ -30,14 +59,18 @@ class Main:
 
         self.infusion_recordings = []
         self.check_records = CheckRecords(self.infusion_recordings)
+'''
 
-    def run_app(self):
-        # Nurse - Login / Registration
-        auth_nurse_ui = AuthNurseUi(nurse_service=self.nurse_service)
+# -------------------------------------------------
+
+'''
         actual_nurse = auth_nurse_ui.start_screen()
         self.actual_nurse.extend(actual_nurse)
         print(f"\n\n\n---Welcome, {self.actual_nurse[1]}---")
         self.run_home_menu()
+'''
+
+# --------------------------------------------------
 
     def run_home_menu(self):
         try:
