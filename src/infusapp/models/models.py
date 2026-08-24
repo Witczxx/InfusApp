@@ -1,15 +1,7 @@
 from dataclasses import dataclass
 
-
 @dataclass
 class Nurse:
-    nurse_id: int
-    nurse_name: str
-    pw: str
-
-
-@dataclass
-class NurseInfo:
     nurse_id: int
     nurse_name: str
 

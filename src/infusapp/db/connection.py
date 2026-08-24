@@ -27,7 +27,7 @@ class Database:
 
     def fetchone(self, query: str, params: tuple = ()) -> sqlite3.Row | None:
         with self.get_connection() as conn:
-            conn.execute(query, params).fetchone()
+            return conn.execute(query, params).fetchone()
 
     def fetch_all(self, query: str, params: tuple = ()) -> list[sqlite3.Row] | None:
         with self.get_connection() as conn:

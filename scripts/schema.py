@@ -14,7 +14,7 @@ def create_table_nurses(db: Database) -> None:
     db.execute("""
         CREATE TABLE nurses(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            nurse_id INT,
+            nurse_id INT UNIQUE,
             nurse_name TEXT,
             hash_pw TXT
         )
