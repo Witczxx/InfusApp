@@ -5,3 +5,4 @@ pyproject.toml
 __pycache__/
 pyrightconfig.json
 src/infusapp/medi_database.json
+data/*.db
