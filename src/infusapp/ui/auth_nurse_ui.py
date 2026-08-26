@@ -57,7 +57,7 @@ class AuthNurseUi:
             )
             if register is not None:
                 print("\n---Registration Successful!---")
-                print(f"Your ID is: {register.nurse_id}\nPlease not down your ID")
+                print(f"Your ID is: {register.nurse_id}\nPlease note down your ID")
                 return register
         print("\n---Registration Failed---")
         return None

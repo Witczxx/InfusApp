@@ -28,7 +28,7 @@ class NurseService:
         )
 
     def registration(self, nurse_name: str, pw: str) -> Nurse | None:
-        nurse_name = nurse_name.strip()
+        nurse_name = nurse_name.strip().title()
         match: Row | None = self.nurse_rep.search_by_input(user_input=nurse_name)
         if (
             match is not None

@@ -1,5 +1,4 @@
 from infusapp.models.models import Nurse
-from infusapp.ui import auth_nurse_ui
 
 def test_login_success(monkeypatch, auth_nurse_ui_and_service):
     auth_nurse_ui, fake_nurse_service = auth_nurse_ui_and_service

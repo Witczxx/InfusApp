@@ -1,17 +1,7 @@
-from infusapp import drip_rate_tapper
-
-
 class RecordUi:
 
-    def __init__(self, actual_nurse, patient_service, medi_service, drip_rate_tapper):
-        # Assisting Functions
-        self.patient_service = patient_service
-        self.medi_service = medi_service
-        self.drip_rate_tapper = drip_rate_tapper
-        # Nurse / Patient / Medication
-        self.actual_nurse = actual_nurse
-        self.actual_patient = []
-        self.actual_medi = []       # Later: [ingredient, strength, found_df]
+    def __init__(self, record_rep):
+        self.record_rep = record_rep
 
 
     def record_ui_menu(self):

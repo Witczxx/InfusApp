@@ -1,89 +1,35 @@
 import random
 import re
+from sqlite3 import Row
 
-from infusapp.model import Patient
-from infusapp.service_helper import check_existence, find_by_value, val_name, generate_id
+from infusapp.models.models import Patient
 
 
 class PatientService:
-    def __init__(self):
-        self.patients = []
-        self.patients.append(
-            Patient(patient_id="1000000000", patient_name="Anna Schmidt")
-        )
+    def __init__(self, patient_rep):
+        self.patient_rep = patient_rep
 
-    ### LOGIN
-    def login_patient(self, patient_name=None, patient_id=None):
-        # ID exists?
-        if patient_id is not None:
-            if not self.patient_id_exists(patient_id=patient_id):
-                raise ValueError("\n---Patient not found---")
-            patient_name = self.get_patient_name_by_id(patient_id=patient_id)
-        # Name exists?
-        elif patient_name is not None:
-            if not self.patient_name_exists(patient_name=patient_name):
-                raise ValueError("\n---Patient not found---")
-            patient_id = self.get_patient_id_by_name(patient_name=patient_name)
-        # ID & Name is None
-        else:
-            raise ValueError("\n---Patient not Found---")
-        # Login Successful
-        logged_patient = Patient(patient_id=patient_id, patient_name=patient_name)
-        return patient_id, patient_name
+    def search_for_patient(self, user_input: str) -> Patient | None:
+        finding: Row | None = self.patient_rep.search_by_input(user_input=user_input)
+        patient: Patient | None = Patient(patient_id=finding["patient_id"], patient_name=finding["patient_name"]) if finding is not None else None
+        return patient
 
-    # REGISTRATION
-    def register_patient(self, patient_name):
-        # Name Valid?
-        if not self.val_patient_name(patient_name=patient_name):
-            raise ValueError(
-                "\n---Invalid Patient Name---\nEnter the first and last name (e.g. Max Mustermann)"
-            )
-        # Name Taken?
-        if self.patient_name_exists(patient_name=patient_name):
-            raise ValueError("\n---Patient already exists---")
-        # Generate ID
+    def register_patient(self, user_input: str) -> Patient | None:
+        user_input = user_input.strip().title()
+        if not self.val_patient_name(user_input=user_input):
+            print("\nInvalid Patient Name. Please try again")
+            return None
         patient_id = self.generate_patient_id()
-        # Add to Database
-        new_patient = Patient(patient_id=patient_id, patient_name=patient_name)
-        self.patients.append(new_patient)
-        return patient_id, patient_name
+        patient = self.patient_rep.add_to_db(patient_id=patient_id, patient_name=user_input)
+        patient = Patient(patient_id=patient["patient_id"], patient_name=patient["patient_name"])
+        return patient
 
-    ### FUNCTIONS
+    def val_patient_name(self, user_input):
+        return bool(re.search(r"^[a-zA-Z]{2,16} [a-zA-Z]{2,16}$", user_input.strip()))
 
-    ### ID VALID?
-    def val_patient_id(self, patient_id):
-        return bool(re.search(r"^[0-9]{10}$", patient_id.strip()))
-
-    ### NAME VALID?
-    def val_patient_name(self, patient_name):
-        return bool(re.search(r"^[a-zA-Z]{2,16} [a-zA-Z]{2,16}$", patient_name.strip()))
-
-    ### ID EXISTS?
-    def patient_id_exists(self, patient_id):
-        return check_existence(
-            entries=self.patients, field_name="patient_id", search_value=patient_id
-        )
-
-    ### NAME EXISTS?
-    def patient_name_exists(self, patient_name):
-        return check_existence(
-            entries=self.patients, field_name="patient_name", search_value=patient_name
-        )
-
-    ### FIND ID
-    def get_patient_name_by_id(self, patient_id):
-        patient = find_by_value(
-            entries=self.patients, field_name="patient_id", search_value=patient_id
-        )
-        return patient.patient_name if patient is not None else None
-
-    ### FIND NAME
-    def get_patient_id_by_name(self, patient_name):
-        patient = find_by_value(
-            entries=self.patients, field_name="patient_name", search_value=patient_name
-        )
-        return patient.patient_id if patient is not None else None
-
-    ### GENERATE ID
     def generate_patient_id(self):
-        return generate_id(self.patients, "patient_id", 1000000000, 9999999999)
+        while True:
+            id: int = random.randrange(start=1000000000, stop=9999999999)
+            id_exists: Row | None = self.patient_rep.search_by_input(user_input=str(id))
+            if not id_exists:
+                return id
