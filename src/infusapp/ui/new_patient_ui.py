@@ -5,16 +5,17 @@ class NewPatientUi:
         self.patient_service = patient_service
 
     def run(self) -> Patient | None:
+        patient: Patient | None; user_input: str
         patient, user_input = self.choose_patient()
         if patient is None:
-            patient = self.ask_to_register_patient(user_input=user_input)
+            patient: Patient | None = self.ask_to_register_patient(user_input=user_input)
         if patient is not None:
             print("\n---Patient Chosen---")
             print(f"Name: {patient.patient_name}")
             print(f"ID: {patient.patient_id}")
             return patient
         else:
-            self.run()
+            return self.run()
 
     def choose_patient(self) -> tuple:
         print("\n---Choose Patient---")
@@ -34,7 +35,7 @@ class NewPatientUi:
             return patient
         elif ask_first_infusion == "n":
             print("\n---Search for the Patient again---")
-            self.choose_patient()
+            return self.run()
         else:
             print("Answer is not 'y' or 'n'. Try again.")
-            self.ask_to_register_patient(user_input=user_input)
+            return self.ask_to_register_patient(user_input=user_input)

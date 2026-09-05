@@ -1,6 +1,7 @@
 import sys
 from pathlib import Path
 
+from infusapp.exceptions.exceptions import DocumentationAborted
 
 class HomeUi:
 
@@ -14,7 +15,10 @@ class HomeUi:
         print("\n---Home Screen---")
         choice: int = self.choose_one_to_four()
         if choice == 1:
-            return self.new_infusion_ui.run()
+            try:
+                return self.new_infusion_ui.run()
+            except DocumentationAborted:
+                return self.run()
         elif choice == 2:
             return self.record_ui.run()
         elif choice == 3:

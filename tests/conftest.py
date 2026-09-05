@@ -9,6 +9,8 @@ from infusapp.services.nurse_service import NurseService
 from infusapp.services.patient_service import PatientService
 from scripts.schema import create_table_nurses, create_table_patients
 
+from infusapp.db.medi_repository import MediRepository
+from infusapp.services.medi_service import MediService 
 
 @pytest.fixture
 def db(tmp_path) -> Database:
@@ -36,3 +38,13 @@ def patient_repository(db) -> PatientRepository:
 @pytest.fixture
 def patient_service(patient_repository) -> PatientService:
     return PatientService(patient_rep=patient_repository)
+
+
+@pytest.fixture
+def medi_repository(db) -> MediRepository:
+    return MediRepository(db=db)
+
+
+@pytest.fixture
+def medi_service(medi_repository) -> MediService:
+    return MediService(medi_rep=medi_repository)

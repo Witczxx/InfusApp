@@ -25,7 +25,7 @@ class PatientService:
         return patient
 
     def val_patient_name(self, user_input):
-        return bool(re.search(r"^[a-zA-Z]{2,16} [a-zA-Z]{2,16}$", user_input.strip()))
+        return bool(re.search(r"^[\w]{2,16} [\w]{2,16}$", user_input.strip()))
 
     def generate_patient_id(self):
         while True:

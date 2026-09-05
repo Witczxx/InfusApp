@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from datetime import datetime
 
 @dataclass
 class Nurse:
@@ -13,6 +14,14 @@ class Patient:
 
 
 @dataclass
-class Infusion:
-    medi_id: int
-    medi_name: str
+class Medi:
+    ingredient: str
+    strength: str
+    unit: int | float
+    dosage_form: str
+    carrier_fluid: str | None
+    total_volume: int
+    drops_per_min: int
+    ml_per_hour: int
+    start_time: datetime
+    stop_time: datetime

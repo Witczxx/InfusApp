@@ -1,11 +1,6 @@
 '''
 from infusapp import drip_rate_tapper
-from infusapp.auth_nurse_ui import AuthNurseUi
-from infusapp.home_ui import HomeUi
-from infusapp.medi_db import MediDb
 from infusapp.medi_service import MediService
-from infusapp.nurse_service import NurseService
-from infusapp.patient_service import PatientService
 from infusapp.record_ui import RecordUi
 from infusapp.drip_rate_tapper import DripRateTapper
 from infusapp.check_records import CheckRecords
@@ -30,7 +25,6 @@ db_path = Path(__file__).parent / "medi_database.txt"
         self.infusion_recordings = []
         self.check_records = CheckRecords(self.infusion_recordings)
 '''
-
 # -------------------------------------------------
 
 '''

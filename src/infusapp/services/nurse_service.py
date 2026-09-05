@@ -48,7 +48,7 @@ class NurseService:
         )
 
     def val_name(self, search_value: str) -> bool:
-        return bool(re.search(r"^[a-zA-Z]{2,16} [a-zA-Z]{2,16}$", search_value.strip()))
+        return bool(re.search(r"^[\w]{2,16} [\w]{2,16}$", search_value.strip()))
 
     def val_pw(self, pw: str) -> bool:
         return bool(re.search(r"^.{8,32}$", pw))

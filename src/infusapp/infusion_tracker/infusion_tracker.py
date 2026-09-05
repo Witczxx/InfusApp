@@ -4,26 +4,22 @@ import time
 
 from pynput import keyboard
 
+# Clean Keyboard Inputs on Mac/Linux/Windows
 try:
     import termios
 
     def _flush_stdin():
-        # Unix/macOS: verwirft alle Zeichen, die im Terminal-Eingabepuffer
-        # liegen (z.B. Tastendrücke, die pynput während des Listenings
-        # zusätzlich ans Terminal durchgereicht hat), bevor der nächste
-        # input()-Aufruf erfolgt.
         termios.tcflush(sys.stdin, termios.TCIFLUSH)
 
 except ImportError:
     import msvcrt
 
     def _flush_stdin():
-        # Windows: liest und verwirft alle noch anstehenden Tastendrücke.
         while msvcrt.kbhit():
             msvcrt.getch()
 
 
-class DripRateTapper:
+class InfusionTracker:
     def __init__(self, drop_factor=20, window=5):
         self.drop_factor = drop_factor
         self.window = window
@@ -33,11 +29,13 @@ class DripRateTapper:
 
     def menu(self):
         self.run()
-        drops_per_min = self.get_drops_per_min()
-        ml_per_hour = self.get_ml_per_hour(drops_per_min=drops_per_min)
+        if len(self.timestamps) <= 2:
+            return None
+        drops_per_min = round(self.get_drops_per_min(), 2)
+        ml_per_hour = round(self.get_ml_per_hour(drops_per_min=drops_per_min), 2)
         print("\n---Results---")
-        print(f"Drops per Min: {round(drops_per_min, 2)} drops/min")
-        print(f"mL per Hour: {round(ml_per_hour, 2)} mL/h")
+        print(f"Drops per Min: {drops_per_min} drops/min")
+        print(f"mL per Hour: {ml_per_hour} mL/h")
         return drops_per_min, ml_per_hour
 
     def clock_display(self):
@@ -83,13 +81,11 @@ class DripRateTapper:
         print(f"Press any key with each drop. Press ESC to stop.")
         with keyboard.Listener(on_press=self.on_press) as listener:
             listener.join()
-        time.sleep(0.05)  # kurz warten, bis das OS das Zeichen wirklich in den Terminal-Puffer geschrieben hat
+        time.sleep(0.05)
         _flush_stdin()
         print("\n\n---Counting Complete---")
 
     def get_drops_per_min(self):
-        # if len(self.timestamps) < 2:
-        # return None
         total_time = self.timestamps[-1] - self.timestamps[0]
         total_intervals = len(self.timestamps) - 1
         avg_interval = total_time / total_intervals

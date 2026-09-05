@@ -7,6 +7,7 @@ def run(db: Database):
     create_table_nurses(db=db)
     create_table_patients(db=db)
     create_table_medications(db=db)
+    create_table_infusions(db=db)
 
 
 def create_table_nurses(db: Database) -> None:
@@ -26,7 +27,7 @@ def create_table_patients(db: Database) -> None:
     db.execute("""
         CREATE TABLE patients(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            patient_id INT,
+            patient_id INT UNIQUE,
             patient_name TEXT
         )
     """)
@@ -52,6 +53,28 @@ def create_table_medications(db: Database) -> None:
             rs TEXT,
             type TEXT,
             applicant_full_name TEXT
+        )
+    """)
+
+def create_table_infusions(db: Database) -> None:
+    db.execute("DROP TABLE IF EXISTS infusions")
+    db.execute("""
+        CREATE TABLE infusions(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nurse_id INT UNIQUE,
+            nurse_name TEXT,
+            patient_id INT UNIQUE,
+            patient_name TEXT,
+            ingredient TEXT,
+            strength TEXT,
+            unit INT,
+            dosage_form TEXT,
+            carrier_fluid TEXT,
+            total_volume INT,
+            drops_per_min INT,
+            ml_per_hour INT,
+            start_time DATETIME,
+            stop_time DATETIME
         )
     """)
 

@@ -51,9 +51,10 @@ def test_val_name_limits(nurse_service):
     result_6 = nurse_service.val_name(search_value="longestnameeverr longestnameeverr")
     result_7 = nurse_service.val_name(search_value="  Anna with Blankspaces  ")
     result_8 = nurse_service.val_name(search_value=" Anna Blank ")
+    result_9 = nurse_service.val_name(search_value="Änna Schmidt")
     assert result_1 is False and result_2 is False and result_3 is False
     assert result_4 is False and result_5 is True and result_6 is True
-    assert result_7 is False and result_8 is True
+    assert result_7 is False and result_8 is True and result_9 is True
 
 
 def test_val_pw_limits(nurse_service):

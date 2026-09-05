@@ -10,5 +10,5 @@ def anna(nurse_service) -> dict:
 @pytest.fixture
 def max(patient_service) -> dict:
     name = "Max Mustermann"
-    patient = patient_service.registration(patient_name=name)
-    return {"patient": patient, "name": name}
+    patient = patient_service.register_patient(user_input=name)
+    return {"patient": patient, "name": patient.patient_name, "id": patient.patient_id}

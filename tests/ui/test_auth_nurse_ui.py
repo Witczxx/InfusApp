@@ -43,8 +43,8 @@ def test_register_fail_register_nurse(monkeypatch, auth_nurse_ui_and_service, ca
     fake_nurse_service.registration.return_value = None
     result = auth_nurse_ui.register_nurse()
     assert result is None
-    captured = capsys.readouterr()
-    assert "Failed" in captured.out
+    capture = capsys.readouterr()
+    assert "Failed" in capture.out
 
 def test_login_or_register_1_success(monkeypatch, auth_nurse_ui_and_service):
     auth_nurse_ui, fake_nurse_service = auth_nurse_ui_and_service
