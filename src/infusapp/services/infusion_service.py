@@ -5,6 +5,6 @@ class InfusionService:
         self.infusion_rep = infusion_rep
 
     def add_to_db(self, nurse, patient, medi) -> None:
-        self.infusion_rep.add_to_db(
+        return self.infusion_rep.add_to_db(
             nurse=nurse, patient=patient, medi=medi
         )

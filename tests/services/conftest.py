@@ -1,4 +1,6 @@
 import pytest
+import sqlite3
+
 
 @pytest.fixture
 def anna(nurse_service) -> dict:
@@ -6,6 +8,7 @@ def anna(nurse_service) -> dict:
     pw = "test1234"
     nurse = nurse_service.registration(nurse_name=name, pw=pw)
     return {"nurse": nurse, "name": name, "pw": pw}
+
 
 @pytest.fixture
 def max(patient_service) -> dict:

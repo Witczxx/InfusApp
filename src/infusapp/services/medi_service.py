@@ -20,7 +20,6 @@ class MediService:
             if ("INTRAVENOUS" in finding["route"] or "INJECTION" in finding["route"])
             and any(user_input in str(string) for string in finding)
         }
-        #ingredients_list: list = list(data for data in ingredients_by_route)
         if not ingredients_by_route:
             return None
         return sorted(ingredients_by_route)
@@ -29,10 +28,10 @@ class MediService:
         found_strengths: list[Row] = self.medi_rep.get_strengths(
             chosen_ingredient=chosen_ingredient
         )
-        unique_strengths = {s["strength"] for s in found_strengths}
+        unique_strengths = {strength["strength"] for strength in found_strengths}
         return sorted(unique_strengths, key=self.strengths_sort_key)
 
-    def strengths_sort_key(self, strengths):
+    def strengths_sort_key(self, strengths) -> tuple:
         matches = re.findall(r"\d+", strengths)
         return tuple(int(n) for n in matches)
 
@@ -44,10 +43,12 @@ class MediService:
             df_findings_set: set = {finding["df"] for finding in df_findings}
             return " | ".join(sorted(df_findings_set))
         else:
+            print("Dosage Form is Unknown.")
             return "Unknown"
 
-    def calculate_datetimes(self, total_volume: int, ml_per_hour: int) -> tuple:
-        start_time: datetime = datetime.now()
-        time_dif_min = total_volume * ml_per_hour * 60
+    def calculate_datetimes(self, total_volume: int, ml_per_hour: int, start_time: datetime | None = None) -> tuple:
+        if start_time is None:
+            start_time = datetime.now()
+        time_dif_min: int | float = total_volume / ml_per_hour * 60
         stop_time: datetime = start_time + timedelta(minutes=time_dif_min)
         return start_time, stop_time

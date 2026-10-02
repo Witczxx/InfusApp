@@ -56,14 +56,15 @@ def create_table_medications(db: Database) -> None:
         )
     """)
 
+
 def create_table_infusions(db: Database) -> None:
     db.execute("DROP TABLE IF EXISTS infusions")
     db.execute("""
         CREATE TABLE infusions(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            nurse_id INT UNIQUE,
+            nurse_id INT,
             nurse_name TEXT,
-            patient_id INT UNIQUE,
+            patient_id INT,
             patient_name TEXT,
             ingredient TEXT,
             strength TEXT,

@@ -49,7 +49,7 @@ class Main:
         nurse: Nurse = self.auth_nurse_ui.run()
         new_infusion_ui: NewInfusionUi = NewInfusionUi(
             nurse=nurse, new_patient_ui=self.new_patient_ui, new_medi_ui=self.new_medi_ui,
-            infusion_service=self.infusion_service,
+            infusion_service=self.infusion_service
         )
         home_ui = HomeUi(
             nurse=nurse, new_infusion_ui=new_infusion_ui, record_ui=self.record_ui,

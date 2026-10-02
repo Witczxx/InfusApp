@@ -27,7 +27,7 @@ class MediUiHelper:
         while True:
             try:
                 ingredient_input = input("Input: ")
-                if ingredient_input == 'q'.lower():
+                if ingredient_input.lower() == 'q':
                     raise DocumentationAborted()
                 int_ingredient_input = int(ingredient_input) - 1
                 if int_ingredient_input  >= 0 and int_ingredient_input < len(ingredients_list):
@@ -45,7 +45,7 @@ class MediUiHelper:
         while True:
             try:
                 strength_input = input("Input: ")
-                if strength_input == 'q'.lower():
+                if strength_input.lower() == 'q':
                     raise DocumentationAborted()
                 strength_input = int(strength_input) - 1
                 if strength_input >= 0 and strength_input < len(strengths):
@@ -82,7 +82,10 @@ class MediUiHelper:
         while True:
             try:
                 choice_3 = int(input("\nEnter Unit: "))
-                return choice_3
+                if choice_3 > 0 and choice_3 < 9999999:
+                    return choice_3
+                else:
+                    print("Input has an uncommon number.")
             except ValueError:
                 print("Input is not a number.")
 
@@ -96,13 +99,15 @@ class MediUiHelper:
                 print("---Selection Completed---")
                 return False
             else:
-                print("Input not Recognized. Enter 'y' or 'n'")
+                print("Input not recognized. Enter 'y' or 'n'")
 
     def choose_carrier_fluid_input(self, carrier_fluids: list) -> int:
         for index, fluid in enumerate(carrier_fluids):
             print(f"-> {index}: {fluid}")
         while True:
             choice = input("Input: ")
+            if choice.lower() == 'q':
+                raise DocumentationAborted()
             if choice in ["1", "2", "3", "4"]:
                 return int(choice) - 1
             else:
