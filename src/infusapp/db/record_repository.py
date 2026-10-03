@@ -4,9 +4,11 @@ class RecordRepository:
         self.db = db
 
     def get_records(self, nurse):
-        records = self.db.fetch_all(
+        return self.db.fetch_all(
             ("""
-               SELECT (patient_name, ingredient, strength, unit, total_volume, ml_per_hour, start_time, stop_time)
+               SELECT patient_name, ingredient, strength, unit, total_volume, ml_per_hour,
+               strftime('%Y-%m-%d %H:%M:%S', start_time) AS start_time,
+               strftime('%Y-%m-%d %H:%M:%S', stop_time)  AS stop_time
                FROM infusions
                WHERE nurse_name = ? AND nurse_id = ?
                """),

@@ -1,6 +1,5 @@
 .DS_Store
 .python-version
-pyproject.toml
 .notes/
 __pycache__/
 pyrightconfig.json

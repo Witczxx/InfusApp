@@ -7,4 +7,5 @@ class RecordUi:
 
     def run(self, nurse):
         records = self.record_rep.get_records(nurse=nurse)
-        print(tabulate(records, headers="keys", tablefmt="grid", maxcolwidths=15))
+        print(tabulate(records, headers=records[0].keys(), tablefmt="grid", maxcolwidths=15))
+        input("\n---Press any key to return to the Home Screen---")
