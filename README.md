@@ -16,7 +16,7 @@ records everything automatically.
 # Getting Started
 
 ### 1. Clone the Project
-git clone <your-repo-url>
+git clone ---repo-url--- <br>
 cd InfusApp
 
 ### 2. Install Dependencies
