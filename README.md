@@ -15,7 +15,7 @@ records everything automatically.
 
 # Getting Started
 
-### Clone the Project
+### 1. Clone the Project
 git clone <your-repo-url>
 cd InfusApp
 
