@@ -23,7 +23,7 @@ def auth_nurse_ui_and_service() -> tuple:
 
 
 @pytest.fixture
-def new_patient_ui_and__service() -> tuple:
+def new_patient_ui_and_service() -> tuple:
     fake_patient_service = Mock()
     return NewPatientUi(patient_service=fake_patient_service), fake_patient_service
 
@@ -35,17 +35,13 @@ def new_medi_ui_and_service() -> tuple:
 
 
 @pytest.fixture
-def new_infusion_ui_and_service(
-    nurse, new_patient_ui_and_service, new_medi_ui_and_service
-) -> tuple:
-    fake_new_patient_ui, _ = new_patient_ui_and_service()
-    fake_new_medi_ui, _ = new_medi_ui_and_service()
+def new_infusion_ui_and_service(nurse) -> tuple:
     fake_infusion_service = Mock()
     return (
         NewInfusionUi(
             infusion_service=fake_infusion_service,
-            new_patient_ui=fake_new_patient_ui,
-            new_medi_ui=fake_new_medi_ui,
+            new_patient_ui=Mock(),
+            new_medi_ui=Mock(),
             nurse=nurse,
         ),
         fake_infusion_service,
@@ -59,13 +55,9 @@ def new_record_ui_and_service() -> tuple:
 
 
 @pytest.fixture
-def home_ui(
-    nurse, new_infusion_ui_and_service, new_record_ui_and_service
-) -> HomeUi:
-    fake_new_infusion_ui, _ = new_infusion_ui_and_service()
-    fake_record_ui, _ = new_record_ui_and_service()
+def home_ui(nurse) -> HomeUi:
     return HomeUi(
         nurse=nurse,
-        new_infusion_ui=fake_new_infusion_ui,
-        record_ui=fake_record_ui,
+        new_infusion_ui=Mock(),
+        record_ui=Mock(),
     )
