@@ -193,11 +193,6 @@ uv sync
 
 ### 3. Create the database and seed the medication data
 
-> ℹ️ The `data/` directory must exist before the first run (SQLite does not create parent folders):
-> ```bash
-> mkdir -p data
-> ```
-
 ```bash
 uv run python scripts/schema.py           # creates the tables
 uv run python scripts/import_from_txt.py  # imports the FDA medication dataset (~40k rows)
