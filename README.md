@@ -181,7 +181,7 @@ InfusApp/
 ### 1. Clone the project
 
 ```bash
-git clone <your-repo-url> InfusApp
+git clone https://github.com/Witczxx/InfusApp.git InfusApp
 cd InfusApp
 ```
 
