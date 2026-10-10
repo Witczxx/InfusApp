@@ -6,6 +6,8 @@
 
 *Final Project of CS50P: Introduction to Programming with Python (Harvard)*
 
+<img width="1920" height="1080" alt="infusapp_introduction" src="https://github.com/user-attachments/assets/9ac23287-9a7f-4a69-88ad-92ac8ec57a5e" />
+
 </div>
 
 ---
