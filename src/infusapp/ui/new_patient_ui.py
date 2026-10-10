@@ -21,7 +21,7 @@ class NewPatientUi:
         print("\n---Choose Patient---")
         print("Enter the Patient's Name (First, Last) or ID")
         user_input = input("Input: ")
-        patient: Patient | None = self.patient_service.search_for_patient(user_input=user_input)
+        patient: Patient | None = self.patient_service.search_for_patient(user_input=user_input.title())
         return patient, user_input
 
     def ask_to_register_patient(self, user_input: str) -> Patient | None:
@@ -30,7 +30,7 @@ class NewPatientUi:
         ask_first_infusion = input("Input: ").lower()
         if ask_first_infusion == "y":
             patient: Patient = self.patient_service.register_patient(
-                user_input=user_input
+                user_input=user_input.title()
             )
             return patient
         elif ask_first_infusion == "n":
@@ -38,4 +38,4 @@ class NewPatientUi:
             return self.run()
         else:
             print("Answer is not 'y' or 'n'. Try again.")
-            return self.ask_to_register_patient(user_input=user_input)
+            return self.ask_to_register_patient(user_input=user_input.title())

@@ -38,7 +38,7 @@ class AuthNurseUi:
         print("\n---Nurse Login---")
         user_input = input("Enter Name or ID: ")
         pw = pwinput(prompt="Password: ", mask="*")
-        login: Nurse | None = self.nurse_service.login(user_input=user_input, pw=pw)
+        login: Nurse | None = self.nurse_service.login(user_input=user_input.title(), pw=pw)
         (
             print("\n---Login Successful---")
             if login is not None
@@ -53,7 +53,7 @@ class AuthNurseUi:
         rpw = pwinput(prompt="Repeat Password: ", mask="*")
         if pw == rpw:
             register: Nurse | None = self.nurse_service.registration(
-                nurse_name=nurse_name, pw=pw
+                nurse_name=nurse_name.title(), pw=pw
             )
             if register is not None:
                 print("\n---Registration Successful!---")

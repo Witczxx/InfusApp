@@ -25,7 +25,7 @@ class NewMediUi:
         )
         unit: int | float = self.choose_units()
         carrier_fluid: str | None = self.choose_carrier_fluid()
-        total_volume: int = self.choose_total_volume()
+        total_volume: int = self.medi_ui_helper.choose_total_volume()
         drops_per_min: int
         ml_per_hour: int
         drops_per_min, ml_per_hour = self.track_infusion()
@@ -146,19 +146,6 @@ class NewMediUi:
         else:
             carrier_fluid = carrier_fluids[choice]
             return carrier_fluid
-
-    def choose_total_volume(self) -> int:
-        print("Enter the total Infusion Volume [in mL]")
-        print("(press 'q' to return to the home menu)")
-        while True:
-            try:
-                choice = int(input("Input: "))
-                if choice > 0 and choice <= 1000:
-                    return choice
-                else:
-                    print("Please choose a number in the given Range (1-1000).")
-            except ValueError:
-                print("Input is not a number")
 
     def track_infusion(self) -> tuple:
         while True:

@@ -6,7 +6,7 @@ class MediUiHelper:
 
     def get_ingredients_input_data(self, medi_service) -> tuple:
         user_input = input("Input: ").upper()
-        if user_input == 'Q':
+        if user_input.lower() == 'q':
             raise DocumentationAborted()
         fetched_data: list[Row] = medi_service.fetch_data(user_input=user_input)
         return fetched_data, user_input
@@ -103,7 +103,7 @@ class MediUiHelper:
 
     def choose_carrier_fluid_input(self, carrier_fluids: list) -> int:
         for index, fluid in enumerate(carrier_fluids):
-            print(f"-> {index}: {fluid}")
+            print(f"-> {index + 1}: {fluid}")
         while True:
             choice = input("Input: ")
             if choice.lower() == 'q':
@@ -112,3 +112,19 @@ class MediUiHelper:
                 return int(choice) - 1
             else:
                 print("Input is no number.")
+
+    def choose_total_volume(self) -> int:
+        print("\n---Enter the total Infusion Volume [in mL]---")
+        print("(press 'q' to return to the home menu)")
+        while True:
+            raw = input("Input: ")
+            if raw.lower() == 'q':
+                raise DocumentationAborted()
+            try:
+                choice = int(raw)
+            except ValueError:
+                print("Input is not a number")
+                continue
+            if 1 <= choice <= 1000:
+                return choice
+            print("Please choose a number in the given Range (1-1000).")

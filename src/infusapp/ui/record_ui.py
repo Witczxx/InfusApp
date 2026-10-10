@@ -7,5 +7,8 @@ class RecordUi:
 
     def run(self, nurse):
         records = self.record_rep.get_records(nurse=nurse)
-        print(tabulate(records, headers=records[0].keys(), tablefmt="grid", maxcolwidths=15))
+        try:
+            print(tabulate(records, headers=records[0].keys(), tablefmt="grid", maxcolwidths=15))
+        except IndexError:
+            print("\n---No Entries found---")
         input("\n---Press any key to return to the Home Screen---")
